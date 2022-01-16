@@ -1,26 +1,17 @@
 import React, {useState} from 'react';
-import axios from 'axios'
 import styled from 'styled-components'
 import {ResultComponent} from '../ResultComponent'
+import {get} from '../../utils/fetch'
 
 
 export const Home = () => {
     const [person, setPerson] = useState(null)
 
-    const get = async () => {
-      const arr = []
-      axios.get('https://swapi.dev/api/people/1').then(async (data) => {
-        console.log('d1', data.data.name)
-        await arr.push({id:1 , name: data.data.name})
-      });
-      
-      await axios.get('https://swapi.dev/api/people/4').then(async (data) => {
-        console.log('d4', data.data.name)
-        await arr.push({id:4 , name: data.data.name})
-      });
-  
-     setPerson(arr[0])
+    const getResult = async () => {
+         const result = await get();
+         setPerson(result)
     }
+    
   
     return (
       <Container>
@@ -31,7 +22,7 @@ export const Home = () => {
                     <Title>Welcome to <strong>iClinic</strong></Title>
                     <Subtitle>Frontend Challenge</Subtitle>
                 </div>
-                <StartButton onClick={() => get()}>start</StartButton>
+                <StartButton onClick={() => getResult()}>start</StartButton>
             </>
             :
             <>

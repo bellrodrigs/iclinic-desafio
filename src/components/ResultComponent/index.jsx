@@ -1,18 +1,24 @@
 import React from 'react';
 import styled from 'styled-components'
+import {get} from '../../utils/fetch'
 
 export const ResultComponent = ({person, setPerson}) => {
 
     const lukeImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/luke-skywalker.png'
     const darthImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/darth-vader.png'
 
+    const getResult = async () => {
+        const result = await get();
+        setPerson(result)
+   }
+
   return (
       <Container id={person.id}>
           <BackContainer onClick={() => setPerson(null)} id={person.id}>
-            <i class="fa fa-arrow-left" aria-hidden="true" /> <span>back</span>
+            <i className="fa fa-arrow-left" aria-hidden="true" /> <span>back</span>
           </BackContainer>
           <Body>
-              <ChooseButton onClick={() => setPerson(null)} id={person.id}>choose your path again, Padawan</ChooseButton>
+              <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>
               <ResultContianer>
                 <Image src={person.id === 1 ? lukeImg : darthImg} />
                 <ResultText id={person.id}>Your master is <span>{person?.name}</span></ResultText>
