@@ -1,16 +1,21 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback} from 'react';
 import styled from 'styled-components'
 import {ResultComponent} from '../ResultComponent'
 import {get} from '../../utils/fetch'
+import {Loading} from '../Loading'
 
 
 export const Home = () => {
     const [person, setPerson] = useState(null)
+    const [loading, setLoading] = useState(false)
 
-    const getResult = async () => {
-         const result = await get();
-         setPerson(result)
-    }
+    const getResult = useCallback(() => {
+        setLoading(true)
+        return get().then((result) => {
+          setLoading(false);
+          setPerson(result)
+        });
+    },[]);
     
   
     return (
@@ -22,12 +27,20 @@ export const Home = () => {
                     <Title>Welcome to <strong>iClinic</strong></Title>
                     <Subtitle>Frontend Challenge</Subtitle>
                 </div>
-                <StartButton onClick={() => getResult()}>start</StartButton>
+                <StartButton disabled={loading} onClick={() => getResult()}>start</StartButton>
+                {
+                    loading && (
+                        <LoadingContainer>
+                            <strong>Loading</strong>
+                            <Loading />
+                        </LoadingContainer>
+                    )
+                }
             </>
             :
             <>
                 {
-                    person !== null && <ResultComponent person={person} setPerson={setPerson}  />
+                    person !== null && <ResultComponent person={person} setPerson={setPerson} />
                 }
             </>
         }
@@ -72,4 +85,16 @@ const StartButton = styled.button`
     font-size: 18px;
     cursor: pointer;
     margin-top: 274px;
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed
+    }
+`
+
+const LoadingContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
 `

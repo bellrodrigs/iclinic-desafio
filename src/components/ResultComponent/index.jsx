@@ -1,24 +1,36 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useCallback} from 'react';
 import styled from 'styled-components'
 import {get} from '../../utils/fetch'
+import {Loading} from '../Loading'
 
 export const ResultComponent = ({person, setPerson}) => {
 
     const [width, setWidth] = useState(null)
+    const [loading, setLoading] = useState(false)
+
 
     useEffect(() => {
         const w = window.screen.availWidth
         setWidth(w)
-        console.log(window.screen.availWidth)
     },[])
 
     const lukeImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/luke-skywalker.png'
     const darthImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/darth-vader.png'
 
-    const getResult = async () => {
-        const result = await get();
-        setPerson(result)
-   }
+
+    const getResult = useCallback(() => {
+        setLoading(true)
+        return get().then((result) => {
+          setLoading(false);
+          setPerson(result)
+        });
+    },[setPerson]);
+
+    const ButtonChoose  = () => {
+    return (
+        <ChooseButton disabled={loading} onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>
+        )
+    }
 
   return (
       <Container id={person.id}>
@@ -26,12 +38,14 @@ export const ResultComponent = ({person, setPerson}) => {
             <i className="fa fa-arrow-left" aria-hidden="true" /> <span>back</span>
           </BackContainer>
           <Body>
-              {width > 800 && <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>}
-              <ResultContianer>
-                <Image src={person.id === 1 ? lukeImg : darthImg} />
-                <TextContainer><ResultText id={person.id}>Your master is </ResultText><ResultTextStrong id={person.id}> {person?.name}</ResultTextStrong></TextContainer>
-                {width <= 800 && <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>}
-              </ResultContianer>
+              {width > 800 && <ButtonChoose />}
+              {loading ? <Loading id={person.id} /> :
+                <ResultContianer>
+                    <Image src={person.id === 1 ? lukeImg : darthImg} />
+                    <TextContainer><ResultText id={person.id}>Your master is </ResultText><ResultTextStrong id={person.id}> {person?.name}</ResultTextStrong></TextContainer>
+                    {width <= 800 && <ButtonChoose />}
+                </ResultContianer>
+                }
           </Body>
       </Container>
   );
@@ -80,7 +94,14 @@ const ChooseButton = styled.button`
     font-size: 16px;
     line-height: 20px;
     text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     color: ${({id}) => id === 1 ? '#FBFE63' : '#2A2A2A'};
+    &:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
     @media (max-width: 800px)
     {
         margin-top: 34px;
