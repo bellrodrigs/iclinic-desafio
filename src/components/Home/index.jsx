@@ -49,6 +49,7 @@ const Title = styled.div`
     line-height: 88px;
     margin-top: 210px;
     color:#2C97D1;
+    text-align: center;
 
 `
 const Subtitle = styled.div`

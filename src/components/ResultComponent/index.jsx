@@ -1,8 +1,16 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import styled from 'styled-components'
 import {get} from '../../utils/fetch'
 
 export const ResultComponent = ({person, setPerson}) => {
+
+    const [width, setWidth] = useState(null)
+
+    useEffect(() => {
+        const w = window.screen.availWidth
+        setWidth(w)
+        console.log(window.screen.availWidth)
+    },[])
 
     const lukeImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/luke-skywalker.png'
     const darthImg = 'https://raw.githubusercontent.com/iclinic/challenge-front/master/images-masters/darth-vader.png'
@@ -18,10 +26,11 @@ export const ResultComponent = ({person, setPerson}) => {
             <i className="fa fa-arrow-left" aria-hidden="true" /> <span>back</span>
           </BackContainer>
           <Body>
-              <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>
+              {width > 800 && <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>}
               <ResultContianer>
                 <Image src={person.id === 1 ? lukeImg : darthImg} />
-                <ResultText id={person.id}>Your master is <span>{person?.name}</span></ResultText>
+                <TextContainer><ResultText id={person.id}>Your master is </ResultText><ResultTextStrong id={person.id}> {person?.name}</ResultTextStrong></TextContainer>
+                {width <= 800 && <ChooseButton onClick={() => getResult()} id={person.id}>choose your path again, Padawan</ChooseButton>}
               </ResultContianer>
           </Body>
       </Container>
@@ -71,7 +80,11 @@ const ChooseButton = styled.button`
     font-size: 16px;
     line-height: 20px;
     text-align: center;
-    color: ${({id}) => id === 1 ? '#FBFE63' : '#2A2A2A'};;
+    color: ${({id}) => id === 1 ? '#FBFE63' : '#2A2A2A'};
+    @media (max-width: 800px)
+    {
+        margin-top: 34px;
+    }
 `
 
 const ResultContianer = styled.div`
@@ -83,16 +96,41 @@ const ResultContianer = styled.div`
 const Image = styled.img`
     /* margin-top: 91px; */
     border-radius: 50%;
+    width: 380px;
+    @media (max-width: 800px)
+    {
+        width: 302px;
+    }
 `
-const ResultText = styled.p`
+
+const TextContainer = styled.div`
+    display: flex;
+    margin-top: 18px;
+    @media (max-width: 800px)
+    {
+        flex-direction: column;
+        width: 100%;
+        align-items: center;
+    }
+`
+
+const ResultText = styled.div`
+    font-size: 36px;
+    line-height: 44px;
+    display: flex;
+    align-items: center;
+    text-align: center;
+    color: ${({id}) => id === 1 ? '#2A2A2A' : '#fff'};    
+`
+
+const ResultTextStrong = styled.div`
     font-size: 36px;
     line-height: 44px;
     display: flex;
     align-items: center;
     text-align: center;
     color: ${({id}) => id === 1 ? '#2A2A2A' : '#fff'};;
-    span {
-        margin-left: 8px;
-        font-weight: bold;
-    }
+    font-weight: bold;
+    margin-left: 10px;
+    
 `
