@@ -1,8 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios'
 import styled from 'styled-components'
-import {DarthVader} from '../DarthVader'
-import {LukeSkywalker} from '../LukeSkywalker'
+import {ResultComponent} from '../ResultComponent'
 
 
 export const Home = () => {
@@ -35,14 +34,11 @@ export const Home = () => {
                 <StartButton onClick={() => get()}>start</StartButton>
             </>
             :
-            <div>
+            <>
                 {
-                    person.id === 1 && <LukeSkywalker />
+                    person !== null && <ResultComponent person={person} setPerson={setPerson}  />
                 }
-                {
-                    person.id === 4 && <DarthVader />
-                }
-            </div>
+            </>
         }
         
       </Container>
