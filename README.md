@@ -13,6 +13,32 @@ This challenge was proposed by [iClinic](https://github.com/iclinic/challenge-fr
 - Solution URL: [GitHub](https://github.com/bellrodrigs/iclinic-desafio)
 - Live Site URL: [Netlify](https://choose-your-master.netlify.app)
 
+### Run project locally
+Step 1: Go to folder
+```sh
+$ cd iclinic-desafio
+```
+
+Step 2: Install the dependencies
+```sh
+$ yarn install
+```
+or
+```sh
+$ npm install
+```
+
+Step 3: Run the api
+```sh
+$ yarn start
+```
+or
+```sh
+$ npm start
+```
+
+If the default browser does not take you directly to the address the project is running on, go to [React on Localhost](http://localhost:3000)
+
 ### Built with
 
 - Semantic HTML5 markup
