@@ -23,7 +23,7 @@ export const ResultComponent = ({person, setPerson}) => {
         return get().then((result) => {
           setLoading(false);
           setPerson(result)
-        });
+        }).catch(err => console.log(err));
     },[setPerson]);
 
     const ButtonChoose  = () => {
@@ -32,6 +32,15 @@ export const ResultComponent = ({person, setPerson}) => {
         )
     }
 
+    const LoadingComponent = () => {
+        return (
+            <LoadingContainer>
+                Loading
+                <Loading id={person.id} colors={{primary:'#2B2B2B', secundary:'#FBFE63'}} />
+            </LoadingContainer>
+            )
+        }
+
   return (
       <Container id={person.id}>
           <BackContainer onClick={() => setPerson(null)} id={person.id}>
@@ -39,13 +48,14 @@ export const ResultComponent = ({person, setPerson}) => {
           </BackContainer>
           <Body>
               {width > 800 && <ButtonChoose />}
-              {loading ? <Loading id={person.id} /> :
+              {loading && width > 800 &&  <LoadingComponent />}
                 <ResultContianer>
                     <Image src={person.id === 1 ? lukeImg : darthImg} />
-                    <TextContainer><ResultText id={person.id}>Your master is </ResultText><ResultTextStrong id={person.id}> {person?.name}</ResultTextStrong></TextContainer>
+                    <TextContainer><ResultText id={person.id}>Your master is </ResultText><ResultTextStrong data-testid="result-name" id={person.id}> {person?.name}</ResultTextStrong></TextContainer>
+                    {loading && width <= 800 &&  <LoadingComponent />}
                     {width <= 800 && <ButtonChoose />}
                 </ResultContianer>
-                }
+                
           </Body>
       </Container>
   );
@@ -80,7 +90,6 @@ const Body = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    /* margin-top: 93px; */
     height: 85vh;
     justify-content: space-evenly;
 `
@@ -107,7 +116,16 @@ const ChooseButton = styled.button`
         margin-top: 34px;
     }
 `
+const LoadingContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    @media (max-width: 800px)
+    {
+        margin-top: 34px;
+    }
 
+`
 const ResultContianer = styled.div`
     display: flex;
     align-items: center;
@@ -115,7 +133,6 @@ const ResultContianer = styled.div`
 `
 
 const Image = styled.img`
-    /* margin-top: 91px; */
     border-radius: 50%;
     width: 380px;
     @media (max-width: 800px)
