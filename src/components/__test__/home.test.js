@@ -2,7 +2,7 @@ import { render, screen } from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
 import {Home} from '../Home'
 
-test('Should have a welcome text and start button', () => {
+test('Should have a welcome text and start button', async () => {
     render(<Home />);
     const welcome = screen.getByText(/welcome to/i);
     const iclinic = screen.getByText(/iclinic/i);
@@ -13,12 +13,12 @@ test('Should have a welcome text and start button', () => {
     expect(button).toBeInTheDocument();
   });
 
-  test("When press start button should show a loading text", () => {
+  test("When press start button should show a loading text", async () => {
     render(<Home />);
     const button = screen.getByText(/start/i);
       
-    userEvent.click(button);
+    await userEvent.click(button);
     const loading = screen.getByText(/loading/i);
-    expect(loading).toBeInTheDocument();
+    await expect(loading).toBeInTheDocument();
 
   });
